@@ -35,3 +35,22 @@ var map = L.map("map", {
 });
 
 graymap.addTo(map);
+
+var tectonicplates = new L.LayerGroup();
+var earthquakes = new L.LayerGroup();
+
+var baseMaps = {
+  Satellite: satellitemap,
+  Grayscale: graymap,
+  Outdoors: outdoors
+};
+
+var overlays = {
+  "Tectonic Plates": tectonicplates,
+  Earthquakes: earthquakes
+};
+
+L
+  .control
+  .layers(baseMaps, overlays)
+  .addTo(map);
