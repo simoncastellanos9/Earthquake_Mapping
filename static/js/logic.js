@@ -1,4 +1,5 @@
 
+//Create tile layers
 var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
   tileSize: 512,
@@ -26,6 +27,7 @@ var outdoors = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/
   accessToken: API_KEY
 });
 
+//Create map
 var map = L.map("map", {
   center: [
     40.7, -94.5
@@ -36,6 +38,7 @@ var map = L.map("map", {
 
 graymap.addTo(map);
 
+//layers for tectonicplates and earthquake
 var tectonicplates = new L.LayerGroup();
 var earthquakes = new L.LayerGroup();
 
@@ -55,19 +58,21 @@ L
   .layers(baseMaps, overlays)
   .addTo(map);
 
-  d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson").then(function(data) {
-    function styleInfo(feature) {
-    return {
-      opacity: 1,
-      fillOpacity: 1,
-      fillColor: getColor(feature.geometry.coordinates[2]),
-      color: "#000000",
-      radius: getRadius(feature.properties.mag),
-      stroke: true,
-      weight: 0.5
-    };
-  }
-
+//earthquake geoJson
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson").then(function(data) {
+  //Color and radius of magnitude of earthquake
+  function styleInfo(feature) {
+  return {
+    opacity: 1,
+    fillOpacity: 1,
+    fillColor: getColor(feature.geometry.coordinates[2]),
+    color: "#000000",
+    radius: getRadius(feature.properties.mag),
+    stroke: true,
+    weight: 0.5
+  };
+}
+  //Color based on magnitude
   function getColor(depth) {
     switch (true) {
     case depth > 90:
@@ -84,7 +89,7 @@ L
       return "#98ee00";
     }
   }
-
+  //radius based on magnitude
   function getRadius(magnitude) {
     if (magnitude === 0) {
       return 1;
@@ -116,6 +121,7 @@ L
 
   earthquakes.addTo(map);
 
+  //Legend
   var legend = L.control({
     position: "bottomright"
   });
@@ -143,7 +149,7 @@ L
   };
 
   legend.addTo(map);
-
+  //Tectonic plate data
   d3.json("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json").then(function(platedata) {
       L.geoJson(platedata, {
         color: "orange",
