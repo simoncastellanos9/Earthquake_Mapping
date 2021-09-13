@@ -59,7 +59,7 @@ L
   .addTo(map);
 
 //earthquake geoJson
-d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson").then(function(data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
   //Color and radius of magnitude of earthquake
   function styleInfo(feature) {
   return {
